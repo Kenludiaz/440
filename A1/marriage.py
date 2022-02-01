@@ -31,23 +31,18 @@ def match(unmatchedKnights, unmatchedLadies):
 
     engagedLadies = []
 
-    for x in range(1,20):
+    while unenagedKnights:
         for knight in unenagedKnights:
             # Stores the name of the first lady in the knight's list
             lady = unmatchedKnights[knight][0]
 
-            # YES, there are no knights of higher preference in the lady's list
-            if unmatchedLadies[lady][0] == knight:
-                removeFromLists(matched, unmatchedKnights, unmatchedLadies, knight, lady)
-                unenagedKnights.remove(knight)
-
             # MAYBE, not yet proposed to
-            elif (lady not in engagedLadies):
+            if (lady not in engagedLadies):
                 engagedKnights.append(knight)
                 engagedLadies.append(lady)
                 unenagedKnights.remove(knight)
                 # Remove knights of lower preference
-                # removeLowerKnights(unmatchedLadies, lady, knight)
+                removeLowerKnights(unmatchedLadies, lady, knight)
 
             # MAYBE, was proposed to by a knight of higher preference
             elif (knight in unmatchedLadies[lady]):
@@ -68,8 +63,8 @@ def match(unmatchedKnights, unmatchedLadies):
 
 
     # The people that were engaged will now finally tie the knot and will have the same index
-
-    print(matched)
+    for x in range(len(engagedLadies)):
+        print(engagedKnights[x], engagedLadies[x])
 
 # Removes knights and ladies from unmatched and the preference lists of all the others
 def removeFromLists(matched, unmatchedKnights, unmatchedLadies, luckyKnight, luckyLady):
@@ -86,7 +81,7 @@ def removeFromLists(matched, unmatchedKnights, unmatchedLadies, luckyKnight, luc
 def removeLowerKnights(unmatchedLadies, lady, knight):
     index = unmatchedLadies[lady].index(knight)
 
-    for i in range(len(unmatchedLadies), index, -1):
-        print("Removed element", unmatchedLadies[lady].pop())
+    for i in range(len(unmatchedLadies) - index):
+        unmatchedLadies[lady].pop()
 
 main()
