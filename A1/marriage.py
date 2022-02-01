@@ -15,6 +15,9 @@ def handleInput():
             for i in range(pairs * 2):
                 line = f.readline()
                 names = line.split()
+                if len(names) > pairs + 1:
+                    raise Exception()
+
                 if i < pairs: 
                     unmatchedKnights[names[0]] = names[1:]
                 else: 
@@ -71,12 +74,10 @@ def match(unmatchedKnights, unmatchedLadies):
 
 # Removes knights with a lower preference than the one given
 def removeLowerKnights(unmatchedLadies, lady, knight):
-    # print(f"{lady} got proposed by {knight}. Her list was : {unmatchedLadies[lady]}")
     index = unmatchedLadies[lady].index(knight)
 
     for i in range(len(unmatchedLadies[lady]) - index - 1):
         unmatchedLadies[lady].pop()
-    # print(f"{lady} got proposed by {knight}. Her list is : {unmatchedLadies[lady]}")
     
 
 main()
