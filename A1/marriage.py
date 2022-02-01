@@ -28,10 +28,8 @@ def match(unmatchedKnights, unmatchedLadies):
     unenagedKnights = [*unmatchedKnights.keys()]
 
     engagedLadies = []
-    unenagedLadies = [*unmatchedLadies.keys()]
 
     while unenagedKnights:
-
         for knight in unenagedKnights:
             # Stores the name of the first lady in the knight's list
             lady = unmatchedKnights[knight][0]
@@ -41,7 +39,6 @@ def match(unmatchedKnights, unmatchedLadies):
                 engagedKnights.append(knight)
                 engagedLadies.append(lady)
                 unenagedKnights.remove(knight)
-                unenagedLadies.remove(lady)
 
                 # Remove knights of lower preference
                 removeLowerKnights(unmatchedLadies, lady, knight)
@@ -66,36 +63,20 @@ def match(unmatchedKnights, unmatchedLadies):
             else:
                 unmatchedKnights[knight].pop(0)
 
-            # print(unenagedKnights)
-            # print(unenagedLadies)
-
-
     # The people that were engaged will now finally tie the knot
     # The couples will have the same index
     # This prevents the wrong couples from being printed.
     for x in range(len(engagedLadies)):
         print(engagedKnights[x], engagedLadies[x])
 
-# Removes knights and ladies from unmatched and the preference lists of all the others
-def removeFromLists(matched, unmatchedKnights, unmatchedLadies, luckyKnight, luckyLady):
-    unmatchedKnights.pop(luckyKnight)
-    unmatchedLadies.pop(luckyLady)
-    for i in unmatchedKnights:
-        unmatchedKnights[i].remove(luckyLady)
-    for j in unmatchedLadies:
-        unmatchedLadies[j].remove(luckyKnight)
-
-    matched[luckyKnight] = luckyLady
-
 # Removes knights with a lower preference than the one given
 def removeLowerKnights(unmatchedLadies, lady, knight):
-    print(f"{lady} got proposed by {knight}. Her list was : {unmatchedLadies[lady]}")
+    # print(f"{lady} got proposed by {knight}. Her list was : {unmatchedLadies[lady]}")
     index = unmatchedLadies[lady].index(knight)
 
     for i in range(len(unmatchedLadies[lady]) - index - 1):
-        # print(unmatchedLadies[lady])
         unmatchedLadies[lady].pop()
-    print(f"{lady} got proposed by {knight}. Her list is : {unmatchedLadies[lady]}")
+    # print(f"{lady} got proposed by {knight}. Her list is : {unmatchedLadies[lady]}")
     
 
 main()
