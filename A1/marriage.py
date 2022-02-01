@@ -21,26 +21,28 @@ def handleInput():
                     unmatchedLadies[names[0]] = names[1:]
             return unmatchedKnights, unmatchedLadies
     except:
-        print("Exited")
         exit(1)
 
 def match(unmatchedKnights, unmatchedLadies):
-    matched = {}
     engagedKnights = []
     unenagedKnights = [*unmatchedKnights.keys()]
 
     engagedLadies = []
+    unenagedLadies = [*unmatchedLadies.keys()]
 
     while unenagedKnights:
+
         for knight in unenagedKnights:
             # Stores the name of the first lady in the knight's list
             lady = unmatchedKnights[knight][0]
 
-            # MAYBE, not yet proposed to
+            # MAYBE, lady not yet proposed to
             if (lady not in engagedLadies):
                 engagedKnights.append(knight)
                 engagedLadies.append(lady)
                 unenagedKnights.remove(knight)
+                unenagedLadies.remove(lady)
+
                 # Remove knights of lower preference
                 removeLowerKnights(unmatchedLadies, lady, knight)
 
@@ -56,13 +58,21 @@ def match(unmatchedKnights, unmatchedLadies):
                 # Lady is removed and then re-added to have the pairings share an index 
                 engagedKnights.append(knight)
                 engagedLadies.append(lady)
+                unenagedKnights.remove(knight)
+
+                removeLowerKnights(unmatchedLadies, lady, knight)
+            
+            # NO, the knight should never ask the same lady again
+            else:
+                unmatchedKnights[knight].pop(0)
+
+            # print(unenagedKnights)
+            # print(unenagedLadies)
 
 
-            # # NO, the lady already has a knight of higher preference
-            # Remove knights of lower preference
-
-
-    # The people that were engaged will now finally tie the knot and will have the same index
+    # The people that were engaged will now finally tie the knot
+    # The couples will have the same index
+    # This prevents the wrong couples from being printed.
     for x in range(len(engagedLadies)):
         print(engagedKnights[x], engagedLadies[x])
 
@@ -79,9 +89,13 @@ def removeFromLists(matched, unmatchedKnights, unmatchedLadies, luckyKnight, luc
 
 # Removes knights with a lower preference than the one given
 def removeLowerKnights(unmatchedLadies, lady, knight):
+    print(f"{lady} got proposed by {knight}. Her list was : {unmatchedLadies[lady]}")
     index = unmatchedLadies[lady].index(knight)
 
-    for i in range(len(unmatchedLadies) - index):
+    for i in range(len(unmatchedLadies[lady]) - index - 1):
+        # print(unmatchedLadies[lady])
         unmatchedLadies[lady].pop()
+    print(f"{lady} got proposed by {knight}. Her list is : {unmatchedLadies[lady]}")
+    
 
 main()
