@@ -1,8 +1,11 @@
 import sys
+import time 
 
 def main():
+    start = time.perf_counter()
     unmatchedKnights, unmatchedLadies = handleInput()
     match(unmatchedKnights, unmatchedLadies)
+    print(f"Completed Execution in {time.perf_counter() - start} seconds")
     
 # Saves knights and ladies into dictionaries for String:list key-value pairs
 def handleInput():
