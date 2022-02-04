@@ -1,0 +1,15 @@
+
+Completed Execution of marriage-inputs-small/ten.txt in 0.00045898200005467515 seconds
+Completed Execution of marriage-inputs-small/ten.txt in 0.0002811339999198026 seconds
+Completed Execution of marriage-inputs-small/ten.txt in 0.00020935800000643212 seconds
+The average running time of marriage-inputs-small/ten.txt is 0.00031649133332696994
+
+Completed Execution of marriage-inputs-small/hundred.txt in 0.015685019999978067 seconds
+Completed Execution of marriage-inputs-small/hundred.txt in 0.00931465299993306 seconds
+Completed Execution of marriage-inputs-small/hundred.txt in 0.007817932999955701 seconds
+The average running time of marriage-inputs-small/hundred.txt is 0.010939201999955609
+
+Completed Execution of marriage-inputs-small/thousand.txt in 2.051138587999958 seconds
+Completed Execution of marriage-inputs-small/thousand.txt in 1.7614499860000024 seconds
+Completed Execution of marriage-inputs-small/thousand.txt in 0.7951424850000421 seconds
+The average running time of marriage-inputs-small/thousand.txt is 1.535910353000001

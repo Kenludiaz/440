@@ -14,7 +14,7 @@ def main():
     for j in range(len(times)):
         avg += times[j]
     avg /= len(times)
-    print(f"The average running time of {sys.argv[1] }")
+    print(f"The average running time of {sys.argv[1]} is {avg}")
     
 # Saves knights and ladies into dictionaries for String:list key-value pairs
 def handleInput():
