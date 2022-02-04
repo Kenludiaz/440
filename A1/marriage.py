@@ -38,8 +38,7 @@ def match(unmatchedKnights, unmatchedLadies):
         # It is trivially true that all people inside engagedLadies and engagedKnights are paired
         for knight in unenagedKnights:
 
-            # Maintnence: For every iteration there will be for every iteration in 
-            # unengagedKnights there will be one more new pair of knight + lady than the previous
+            # Maintnence: For every iteration in unengagedKnights there will be one more new pair of knight + lady than the previous
 
             # Stores the name of the first lady in the knight's list
             lady = unmatchedKnights[knight][0]
