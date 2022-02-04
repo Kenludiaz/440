@@ -2,10 +2,19 @@ import sys
 import time 
 
 def main():
-    start = time.perf_counter()
-    unmatchedKnights, unmatchedLadies = handleInput()
-    match(unmatchedKnights, unmatchedLadies)
-    print(f"Completed Execution in {time.perf_counter() - start} seconds")
+    times = []
+    for i in range(3):
+        start = time.perf_counter()
+        unmatchedKnights, unmatchedLadies = handleInput()
+        match(unmatchedKnights, unmatchedLadies)
+        end = time.perf_counter()
+        print(f"Completed Execution of {sys.argv[1]} in {end - start} seconds")
+        times.append(end - start)
+    avg = 0
+    for j in range(len(times)):
+        avg += times[j]
+    avg /= len(times)
+    print(f"The average running time of {sys.argv[1] }")
     
 # Saves knights and ladies into dictionaries for String:list key-value pairs
 def handleInput():
@@ -20,7 +29,6 @@ def handleInput():
                 names = line.split()
                 if len(names) > pairs + 1:
                     raise Exception()
-
                 if i < pairs: 
                     unmatchedKnights[names[0]] = names[1:]
                 else: 
