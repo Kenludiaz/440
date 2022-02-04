@@ -2,19 +2,8 @@ import sys
 import time 
 
 def main():
-    times = []
-    for i in range(3):
-        start = time.perf_counter()
-        unmatchedKnights, unmatchedLadies = handleInput()
-        match(unmatchedKnights, unmatchedLadies)
-        end = time.perf_counter()
-        print(f"Completed Execution of {sys.argv[1]} in {end - start} seconds")
-        times.append(end - start)
-    avg = 0
-    for j in range(len(times)):
-        avg += times[j]
-    avg /= len(times)
-    print(f"The average running time of {sys.argv[1]} is {avg}")
+    unmatchedKnights, unmatchedLadies = handleInput()
+    match(unmatchedKnights, unmatchedLadies)
     
 # Saves knights and ladies into dictionaries for String:list key-value pairs
 def handleInput():
@@ -44,7 +33,14 @@ def match(unmatchedKnights, unmatchedLadies):
     engagedLadies = []
 
     while unenagedKnights:
+
+        # Initialization: Since there are no people in any of them, 
+        # It is trivially true that all people inside engagedLadies and engagedKnights are paired
         for knight in unenagedKnights:
+
+            # Maintnence: For every iteration there will be for every iteration in 
+            # unengagedKnights there will be one more new pair of knight + lady than the previous
+
             # Stores the name of the first lady in the knight's list
             lady = unmatchedKnights[knight][0]
 
@@ -77,7 +73,11 @@ def match(unmatchedKnights, unmatchedLadies):
             else:
                 unmatchedKnights[knight].pop(0)
 
-    # The people that were engaged will now finally tie the knot
+    # Termination : There are no knights in unengagedKnights,
+    # and all people in engagedKnights and engagedLadies are paired 
+    # based off of preference
+
+
     # The couples will have the same index
     # This prevents the wrong couples from being printed.
     for x in range(len(engagedLadies)):
