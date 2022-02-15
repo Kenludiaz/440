@@ -83,6 +83,10 @@ def base_case_hull(points: List[Point]) -> List[Point]:
     return points
 
 
+def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
+    # TODO: do this
+    return left_hull + right_hull
+
 def compute_hull(points: List[Point]) -> List[Point]:
     """
     Given a list of points, computes the convex hull around those points
@@ -91,4 +95,37 @@ def compute_hull(points: List[Point]) -> List[Point]:
     # TODO: Implement a correct computation of the convex hull
     #  using the divide-and-conquer algorithm
     # TODO: Document your Initialization, Maintenance and Termination invariants.
+
+    # sorts points clockwise before computation
+    clockwise_sort(points)
+
+    # if the base case is possible, do the base case
+    if len(points) <= 6:
+        base_case_hull(points)
+
+    # recurse case
+    else:
+
+        # get the median
+        median_index = len(points)-1//2
+        median_x_value = points[median_index][1]
+        # TODO: what about the case where all (or enough so that the base case is unsatisfiable on either side)
+        # TODO: points are on the same x value, how should we split the data then?
+        # TODO: in other words, what if splitting yields not enough data for a base case on either side?
+
+        # sorts points into left and right arrays based off of median value
+        left_points = []
+        right_points = []
+        for point in points:
+            if point[1] <= median_x_value:
+                left_points.append(point)
+            else:
+                right_points.append(point)
+
+        # divide
+        left_hull = compute_hull(left_points)
+        right_hull = compute_hull(right_points)
+
+        # merge and conquer
+        points = finger_merge(left_hull, right_hull)
     return points
