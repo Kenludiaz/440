@@ -75,13 +75,65 @@ def clockwise_sort(points: List[Point]):
     points.sort(key=angle)
     return
 
+def get_position(a: Point, b: Point, c: Point) -> int:
+    """
+    Returns the orientation of c with regards to 
+    the line formed by a & b
+    < 0 : below the line
+    = 0 : tangent
+    > 0 : above the line 
+    """
+    # Cross Product
+    ax, ay = a
+    bx, by = b
+    cx, cy = c
+    vec1 = (bx - ax, by - ay)
+    vec2 = (bx - cx, by - cy)
+    return (vec1[0] * vec2[1] - vec1[1] * vec2[0])
+
+def check_positions(positions):
+    """
+    Iterates over all positions
+    Returns true if all positions lie on the tangent or on
+    the same side
+    """
+    is_down = False
+    is_up = False
+    for position in positions:
+        if position < 0:
+            is_down = True
+            if is_up:
+                return False
+        elif position > 0:
+            is_up = True
+            if is_down:
+                return False
+    return True
 
 def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
-    # TODO: You need to implement this function.
-    return points
-
+    hull = []
+    for i in range(len(points)):
+        for j in range(len(points)):
+    # Continue if looking at the same point
+            if i == j:
+                continue
+    # Check all points: see if they all lie on one side of the tangent
+            positions = []
+            for k in range(len(points)):
+                if k == i or k == j:
+                    continue
+                positions.append(get_position(points[i], points[j], points[k]))
+            # If so add them to the hull if not already there
+            if (check_positions(positions)):
+                if points[i] not in hull:
+                    hull.append(points[i])
+                if points[j] not in hull:
+                    hull.append(points[j])
+    # Sort Clockwise
+    clockwise_sort(hull)
+    return hull
 
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
     # TODO: do this
@@ -101,31 +153,31 @@ def compute_hull(points: List[Point]) -> List[Point]:
 
     # if the base case is possible, do the base case
     if len(points) <= 6:
-        base_case_hull(points)
+        points = base_case_hull(points)
 
     # recurse case
-    else:
+    # else:
 
-        # get the median
-        median_index = len(points)-1//2
-        median_x_value = points[median_index][1]
-        # TODO: what about the case where all (or enough so that the base case is unsatisfiable on either side)
-        # TODO: points are on the same x value, how should we split the data then?
-        # TODO: in other words, what if splitting yields not enough data for a base case on either side?
+    #     # get the median
+    #     median_index = len(points)-1//2
+    #     median_x_value = points[median_index][1]
+    #     # TODO: what about the case where all (or enough so that the base case is unsatisfiable on either side)
+    #     # TODO: points are on the same x value, how should we split the data then?
+    #     # TODO: in other words, what if splitting yields not enough data for a base case on either side?
 
-        # sorts points into left and right arrays based off of median value
-        left_points = []
-        right_points = []
-        for point in points:
-            if point[1] <= median_x_value:
-                left_points.append(point)
-            else:
-                right_points.append(point)
+    #     # sorts points into left and right arrays based off of median value
+    #     left_points = []
+    #     right_points = []
+    #     for point in points:
+    #         if point[1] <= median_x_value:
+    #             left_points.append(point)
+    #         else:
+    #             right_points.append(point)
 
-        # divide
-        left_hull = compute_hull(left_points)
-        right_hull = compute_hull(right_points)
+    #     # divide
+    #     left_hull = compute_hull(left_points)
+    #     right_hull = compute_hull(right_points)
 
-        # merge and conquer
-        points = finger_merge(left_hull, right_hull)
+    #     # merge and conquer
+    #     points = finger_merge(left_hull, right_hull)
     return points
