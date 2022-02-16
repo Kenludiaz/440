@@ -137,6 +137,37 @@ def base_case_hull(points: List[Point]) -> List[Point]:
 
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
     # TODO: do this
+
+    # 1: find right most point in left hull -> lTopPoint, lBottomPoint (indexes)
+    # 2: find left most point in right hull -> rTopPoint, rBottomPoint (indexes)
+    # 3: average those point's x coordinates with // and record that x coordinate as vertical line
+    # 4: find intersection with vert-line with two middle points, record value -> max_top, max_bottom
+    # left_backtrack = true
+    # right_backtrack = true
+
+    # top while(left_backtrack || right_backtrack)
+        # move once on right, record intersection value
+            # if lesser, store point in right top point variable, update max_top
+            # if greater, set right_backtrack to false
+        # move once left, record new intersection value
+            # if lesser, store point in right top point variable, update max_top
+            # if greater, set left_backtrack to false
+    # reset backtracks
+    # bottom while(left_backtrack || right_backtrack)
+        # move once on right, record new intersection value
+            # if value is greater, store point in right bottom variable, update max_bottom
+            # if lesser, set right_backtrack to false
+        # move once left, record
+            # if greater, store and update
+            # if lesser, set backtrack
+
+    # merge the two lists in clockwise order starting from bottomLeft index.
+    # use slice function to take left bottom index up to left top index + 1 -> left hull. add to point
+    # use slice function to take right top hull section from right top to end of list -> right top
+        # add to points
+    # use slice function to go from start of right list to right bottom index + 1 -> right bottom
+        # add to points list
+
     return left_hull + right_hull
 
 def compute_hull(points: List[Point]) -> List[Point]:
