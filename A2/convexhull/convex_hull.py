@@ -132,7 +132,8 @@ def base_case_hull(points: List[Point]) -> List[Point]:
                 if points[j] not in hull:
                     hull.append(points[j])
     # Sort Clockwise
-    clockwise_sort(hull)
+    if len(hull) > 1:
+        clockwise_sort(hull)
     return hull
 
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
