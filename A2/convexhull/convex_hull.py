@@ -7,7 +7,7 @@ EPSILON = sys.float_info.epsilon
 Point = Tuple[int, int]
 
 
-def y_intercept(p1: Point, p2: Point, x: int) -> float:
+def y_intercept(p1: Point, p2: Point, x: float) -> float:
     """
     Given two points, p1 and p2, an x coordinate from a vertical line,
     compute and return the the y-intercept of the line segment p1->p2
@@ -138,16 +138,46 @@ def base_case_hull(points: List[Point]) -> List[Point]:
     return hull
 
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
-    # TODO: do this
-
+    # print(left_hull)
+    # print(right_hull)
     # 1: find right most point in left hull -> lTopPoint, lBottomPoint (indexes)
-    # 2: find left most point in right hull -> rTopPoint, rBottomPoint (indexes)
-    # 3: average those point's x coordinates with // and record that x coordinate as vertical line
-    # 4: find intersection with vert-line with two middle points, record value -> max_top, max_bottom
-    # left_backtrack = true
-    # right_backtrack = true
+    l_top_point = 0
+    l_bottom_point = 0
+    for i in range(len(left_hull)):
+        if left_hull[i][0] > left_hull[l_top_point][0]:
+            l_top_point = i
+            l_bottom_point = i
 
-    # top while(left_backtrack || right_backtrack)
+    # print(l_top_point)
+    # 2: find left most point in right hull -> rTopPoint, rBottomPoint (indexes)
+    r_top_point = 0
+    r_bottom_point = 0
+    for i in range(len(right_hull)):
+        if right_hull[i][0] < right_hull[r_top_point][0]:
+            r_top_point = i
+            r_bottom_point = i
+
+    # print(r_top_point)
+
+    # 3: average those point's x coordinates with // and record that x coordinate as vertical line
+    middle_line = (left_hull[l_top_point][0] + right_hull[r_top_point][0])/2
+    # print(middle_line)
+    # print(y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line))
+
+    # 4: find intersection with vert-line with two middle points, record value -> max_top, max_bottom
+    max_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+    max_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+
+    # print(max_top)
+    # print(max_bottom)
+
+    no_left_backtrack = True
+    no_right_backtrack = True
+
+    # 5: find top tangent
+    exit()
+    # TODO: how do we go about moving counter-clockwise on a list stored in clockwise order? march off edge?
+    #while(left_backtrack || right_backtrack)
         # move once on right, record intersection value
             # if lesser, store point in right top point variable, update max_top
             # if greater, set right_backtrack to false
@@ -183,34 +213,41 @@ def compute_hull(points: List[Point]) -> List[Point]:
 
     # sorts points clockwise before computation
     clockwise_sort(points)
+    # print(points)
 
     # if the base case is possible, do the base case
     if len(points) <= 6:
         points = base_case_hull(points)
 
     # recurse case
-    # else:
+    else:
+        # TODO: HOW TO FIND ACTUAL MEDIAN INDEX????
+        # get the median
+        median_index = ((len(points))//2)//2
+        # print(median_index)
+        median_x_value = points[median_index][0]
+        # print("median x")
+        # print(median_x_value)
 
-    #     # get the median
-    #     median_index = len(points)-1//2
-    #     median_x_value = points[median_index][1]
-    #     # TODO: what about the case where all (or enough so that the base case is unsatisfiable on either side)
-    #     # TODO: points are on the same x value, how should we split the data then?
-    #     # TODO: in other words, what if splitting yields not enough data for a base case on either side?
+        # sorts points into left and right arrays based off of median value
+        left_points = []
+        right_points = []
+        for point in points:
+            if point[0] <= median_x_value:
+                left_points.append(point)
+            else:
+                right_points.append(point)
 
-    #     # sorts points into left and right arrays based off of median value
-    #     left_points = []
-    #     right_points = []
-    #     for point in points:
-    #         if point[1] <= median_x_value:
-    #             left_points.append(point)
-    #         else:
-    #             right_points.append(point)
+        # print(left_points)
+        # print(right_points)
+        # print()
 
-    #     # divide
-    #     left_hull = compute_hull(left_points)
-    #     right_hull = compute_hull(right_points)
+        # divide
+        left_hull = compute_hull(left_points)
+        right_hull = compute_hull(right_points)
+        # print(left_hull)
+        # print(right_hull)
 
-    #     # merge and conquer
-    #     points = finger_merge(left_hull, right_hull)
+        # merge and conquer
+        points = finger_merge(left_hull, right_hull)
     return points
