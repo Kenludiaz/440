@@ -145,7 +145,6 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     :param right_hull:
     :return:
     """
-
     # find the inner most point on the left set of points
     l_top_point = 0
     l_bottom_point = 0
@@ -174,13 +173,68 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     no_right_backtrack = True
 
     # 5: find top tangent
+    clockwise_sort(left_hull)
+    clockwise_sort(right_hull)
+    while no_left_backtrack:
+
+        # Decrement index == move counterclockwise
+        l_top_point -= 1
+
+        # See if new_top is higher up
+        new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+        if new_top < top_intersection:
+            top_intersection = new_top
+        else:
+            # Move clockwise and leave left alone
+            l_top_point += 1
+            no_left_backtrack = False
+
+    while no_right_backtrack:
+
+        # Increment index == move clockwise
+        # Modulo prevent overflow
+        r_top_point = (r_top_point + 1) % len(right_hull) 
+
+        # See if the new top is higher up
+        new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+        if new_top < top_intersection:
+            top_intersection = new_top
+        else:
+            # Move counterclockwise and leave left alone
+            r_top_point -= 1 
+            no_right_backtrack = False
+
+    no_left_backtrack  = True
+    no_right_backtrack = True
+
+
+    while no_left_backtrack:
+
+        # Increment == move clockwise
+        # Modulo prevents overflow
+        l_bottom_point = (l_bottom_point + 1) % len(left_hull)
+
+        # See if new bottom is lower down
+        new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+        if new_bottom > bottom_intersection:
+            bottom_intersection = new_bottom
+        else:
+            l_bottom_point -= 1
+            no_left_backtrack = False
+
+    while no_right_backtrack:
+
+        # Decrement == move counter-clockwise
+        r_bottom_point -= 1
+
+        # See if new bottom is lower down
+        new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+        if new_bottom > bottom_intersection:
+            bottom_intersection = new_bottom
+        else:
+            r_bottom_point = (r_bottom_point + 1) % len(right_hull)
+
     exit()
-    # TODO: insight here, when doing counterclockwise looping we just loop in reversed order
-    #   python allows you to index at at negative numbers in a list, [-1], so that can be useful for
-    #   doing our checks for backtracking. We just store the index and decrement / increment as necessary
-    #   we can use ltop/bottom and rtop/bottom to recrod the indexes
-
-
     #while(left_backtrack || right_backtrack)
         # move once clockwise on right, record intersection value
             # if lesser, store point in right top point variable, update max_top
@@ -189,8 +243,7 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             # if lesser, store point in right top point variable, update max_top
             # if greater, set left_backtrack to false
     # reset backtracks
-    no_left_backtrack = True
-    no_right_backtrack = True
+
     # bottom while(left_backtrack || right_backtrack)
         # move once c-clockwise on right, record new intersection value
             # if value is greater, store point in right bottom variable, update max_bottom
@@ -214,14 +267,12 @@ def compute_hull(points: List[Point]) -> List[Point]:
     and returns only the points that are on the hull.
     """
 
-    # TODO: see if we need to sort traditionally here to find median x coord
-
     # sorts points clockwise before computation
     clockwise_sort(points)
 
     # if we have 6 or less points do the base case
     if len(points) <= 6:
-        points = base_case_hull(points)
+        return(base_case_hull(points))
 
     # recursive case
     else:
