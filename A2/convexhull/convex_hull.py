@@ -137,10 +137,16 @@ def base_case_hull(points: List[Point]) -> List[Point]:
     clockwise_sort(hull)
     return hull
 
+
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
-    # print(left_hull)
-    # print(right_hull)
-    # 1: find right most point in left hull -> lTopPoint, lBottomPoint (indexes)
+    """
+
+    :param left_hull:
+    :param right_hull:
+    :return:
+    """
+
+    # find the inner most point on the left set of points
     l_top_point = 0
     l_bottom_point = 0
     for i in range(len(left_hull)):
@@ -148,8 +154,7 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             l_top_point = i
             l_bottom_point = i
 
-    # print(l_top_point)
-    # 2: find left most point in right hull -> rTopPoint, rBottomPoint (indexes)
+    # find the inner most point on the right set of points
     r_top_point = 0
     r_bottom_point = 0
     for i in range(len(right_hull)):
@@ -157,39 +162,40 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             r_top_point = i
             r_bottom_point = i
 
-    # print(r_top_point)
-
-    # 3: average those point's x coordinates with // and record that x coordinate as vertical line
+    # average inner x coordinates and record as middle intersection
     middle_line = (left_hull[l_top_point][0] + right_hull[r_top_point][0])/2
-    # print(middle_line)
-    # print(y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line))
 
-    # 4: find intersection with vert-line with two middle points, record value -> max_top, max_bottom
-    max_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
-    max_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+    # find starting intersection with middle line
+    top_intersection = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+    bottom_intersection = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
 
-    # print(max_top)
-    # print(max_bottom)
-
+    # set up variables useful for our end condition in looping
     no_left_backtrack = True
     no_right_backtrack = True
 
     # 5: find top tangent
     exit()
-    # TODO: how do we go about moving counter-clockwise on a list stored in clockwise order? march off edge?
+    # TODO: insight here, when doing counterclockwise looping we just loop in reversed order
+    #   python allows you to index at at negative numbers in a list, [-1], so that can be useful for
+    #   doing our checks for backtracking. We just store the index and decrement / increment as necessary
+    #   we can use ltop/bottom and rtop/bottom to recrod the indexes
+
+
     #while(left_backtrack || right_backtrack)
-        # move once on right, record intersection value
+        # move once clockwise on right, record intersection value
             # if lesser, store point in right top point variable, update max_top
             # if greater, set right_backtrack to false
-        # move once left, record new intersection value
+        # move once c-clockwisee left, record new intersection value
             # if lesser, store point in right top point variable, update max_top
             # if greater, set left_backtrack to false
     # reset backtracks
+    no_left_backtrack = True
+    no_right_backtrack = True
     # bottom while(left_backtrack || right_backtrack)
-        # move once on right, record new intersection value
+        # move once c-clockwise on right, record new intersection value
             # if value is greater, store point in right bottom variable, update max_bottom
             # if lesser, set right_backtrack to false
-        # move once left, record
+        # move once clockwise on left, record
             # if greater, store and update
             # if lesser, set backtrack
 
@@ -207,27 +213,23 @@ def compute_hull(points: List[Point]) -> List[Point]:
     Given a list of points, computes the convex hull around those points
     and returns only the points that are on the hull.
     """
-    # TODO: Implement a correct computation of the convex hull
-    #  using the divide-and-conquer algorithm
-    # TODO: Document your Initialization, Maintenance and Termination invariants.
+
+    # TODO: see if we need to sort traditionally here to find median x coord
 
     # sorts points clockwise before computation
     clockwise_sort(points)
-    # print(points)
 
-    # if the base case is possible, do the base case
+    # if we have 6 or less points do the base case
     if len(points) <= 6:
         points = base_case_hull(points)
 
-    # recurse case
+    # recursive case
     else:
-        # TODO: HOW TO FIND ACTUAL MEDIAN INDEX????
+        # TODO: HOW TO FIND ACTUAL MEDIAN INDEX?? Is there some way to find it with the already sorted
+        #   points sorted about their polar angle? Should we just do this with a traditionally sorted list?
         # get the median
         median_index = ((len(points))//2)//2
-        # print(median_index)
         median_x_value = points[median_index][0]
-        # print("median x")
-        # print(median_x_value)
 
         # sorts points into left and right arrays based off of median value
         left_points = []
@@ -238,15 +240,9 @@ def compute_hull(points: List[Point]) -> List[Point]:
             else:
                 right_points.append(point)
 
-        # print(left_points)
-        # print(right_points)
-        # print()
-
-        # divide
+        # call recursive computation on our divided lists
         left_hull = compute_hull(left_points)
         right_hull = compute_hull(right_points)
-        # print(left_hull)
-        # print(right_hull)
 
         # merge and conquer
         points = finger_merge(left_hull, right_hull)
