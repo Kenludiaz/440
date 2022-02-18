@@ -33,7 +33,7 @@ def draw_hull():
 if __name__ == '__main__':
     master, points = Tk(), list()
 
-    points = [(0,0),(0,1),(0,2),(1,0),(2,0),(2,2),(3,0),(4,0),(5,0),(5,1),(5,2),(3,2)]
+    points = [(0,50),(0,100),(0,200),(100,0),(200,0),(200,200),(300,0),(400,0),(500,0),(500,100),(500,200),(100,70)]
 
     submit_button = Button(master, text="Draw Hull", command=draw_hull)
     submit_button.pack()
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     w = Canvas(master,
                width=canvas_width,
                height=canvas_height)
-    point_img = PhotoImage(file="ram-sm.gif")
+    point_img = PhotoImage(file="ram-sm-bl.gif")
     w.pack()
     w.bind('<Button-1>', add_point)
 

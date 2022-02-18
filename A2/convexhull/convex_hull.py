@@ -233,8 +233,22 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             bottom_intersection = new_bottom
         else:
             r_bottom_point = (r_bottom_point + 1) % len(right_hull)
+            no_right_backtrack = False
+    
+    # print("\n")
+    # print(right_hull)
+    # print(r_bottom_point, r_top_point)
+    # print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
 
-    exit()
+    # print("\n")
+    # print(left_hull)
+    # print(l_bottom_point, l_top_point)
+    # print(l_top_point % len(left_hull) + 1)
+    # print(left_hull[l_bottom_point : l_top_point % len(left_hull) + 1])
+
+    # exit()
+    
+    
     #while(left_backtrack || right_backtrack)
         # move once clockwise on right, record intersection value
             # if lesser, store point in right top point variable, update max_top
@@ -253,13 +267,18 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             # if lesser, set backtrack
 
     # merge the two lists in clockwise order starting from bottomLeft index.
+
+    hull = left_hull[l_bottom_point : l_top_point % len(left_hull) + 1] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
+    clockwise_sort(hull)
+    # print(hull)
+    
     # use slice function to take left bottom index up to left top index + 1 -> left hull. add to point
     # use slice function to take right top hull section from right top to end of list -> right top
         # add to points
     # use slice function to go from start of right list to right bottom index + 1 -> right bottom
         # add to points list
 
-    return left_hull + right_hull
+    return hull
 
 def compute_hull(points: List[Point]) -> List[Point]:
     """
@@ -269,10 +288,11 @@ def compute_hull(points: List[Point]) -> List[Point]:
 
     # sorts points clockwise before computation
     clockwise_sort(points)
-
     # if we have 6 or less points do the base case
+    # print(base_case_hull([(200,200), (100,70), (100, 0), (200, 0)]))
     if len(points) <= 6:
         return(base_case_hull(points))
+
 
     # recursive case
     else:
