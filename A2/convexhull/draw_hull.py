@@ -9,7 +9,7 @@ from convex_hull import compute_hull
 
 
 def draw_point(canvas, x, y):
-    return canvas.create_image((x, y), image=ram, state=NORMAL)
+    return canvas.create_image((x, y), image=point_img, state=NORMAL)
 
 
 def add_point(event):
@@ -33,6 +33,8 @@ def draw_hull():
 if __name__ == '__main__':
     master, points = Tk(), list()
 
+    points = [(0,0),(0,1),(0,2),(1,0),(2,0),(2,2),(3,0),(4,0),(5,0),(5,1),(5,2),(3,2)]
+
     submit_button = Button(master, text="Draw Hull", command=draw_hull)
     submit_button.pack()
     quit_button = Button(master, text="Quit", command=master.quit)
@@ -43,7 +45,7 @@ if __name__ == '__main__':
     w = Canvas(master,
                width=canvas_width,
                height=canvas_height)
-    ram = PhotoImage(file="ram-sm.gif")
+    point_img = PhotoImage(file="ram-sm.gif")
     w.pack()
     w.bind('<Button-1>', add_point)
 
