@@ -246,30 +246,9 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     # print(l_top_point % len(left_hull) + 1)
     # print(left_hull[l_bottom_point : l_top_point % len(left_hull) + 1])
 
-    # exit()
-    
-    
-    #while(left_backtrack || right_backtrack)
-        # move once clockwise on right, record intersection value
-            # if lesser, store point in right top point variable, update max_top
-            # if greater, set right_backtrack to false
-        # move once c-clockwisee left, record new intersection value
-            # if lesser, store point in right top point variable, update max_top
-            # if greater, set left_backtrack to false
-    # reset backtracks
-
-    # bottom while(left_backtrack || right_backtrack)
-        # move once c-clockwise on right, record new intersection value
-            # if value is greater, store point in right bottom variable, update max_bottom
-            # if lesser, set right_backtrack to false
-        # move once clockwise on left, record
-            # if greater, store and update
-            # if lesser, set backtrack
-
-    # merge the two lists in clockwise order starting from bottomLeft index.
 
     hull = left_hull[l_bottom_point : l_top_point % len(left_hull) + 1] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
-    clockwise_sort(hull)
+    # clockwise_sort(hull)
     # print(hull)
     
     # use slice function to take left bottom index up to left top index + 1 -> left hull. add to point
@@ -285,31 +264,24 @@ def compute_hull(points: List[Point]) -> List[Point]:
     Given a list of points, computes the convex hull around those points
     and returns only the points that are on the hull.
     """
-
-    # sorts points clockwise before computation
-    clockwise_sort(points)
-    # if we have 6 or less points do the base case
-    # print(base_case_hull([(200,200), (100,70), (100, 0), (200, 0)]))
+    
     if len(points) <= 6:
         return(base_case_hull(points))
 
 
     # recursive case
     else:
-        # TODO: HOW TO FIND ACTUAL MEDIAN INDEX?? Is there some way to find it with the already sorted
-        #   points sorted about their polar angle? Should we just do this with a traditionally sorted list?
-        # get the median
-        median_index = ((len(points))//2)//2
-        median_x_value = points[median_index][0]
+        points = sorted(points, key= lambda x: x[0])
+        median_index = math.ceil(len(points)/2)
 
         # sorts points into left and right arrays based off of median value
         left_points = []
         right_points = []
-        for point in points:
-            if point[0] <= median_x_value:
-                left_points.append(point)
+        for i in range(len(points)):
+            if i < median_index:
+                left_points.append(points[i])
             else:
-                right_points.append(point)
+                right_points.append(points[i])
 
         # call recursive computation on our divided lists
         left_hull = compute_hull(left_points)
