@@ -119,7 +119,7 @@ def check_positions(positions):
 def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
-    print("In base case ", points)
+    # print("In base case ", points)
     if len(points) == 1:
         return points
     hull = []
@@ -181,7 +181,7 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
 
     no_left_backtrack = True
     no_right_backtrack = True
-    while (no_left_backtrack or no_left_backtrack):
+    while (no_left_backtrack or no_right_backtrack):
 
         if no_right_backtrack:
             # Increment index == move clockwise
@@ -246,19 +246,30 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             else:
                 r_bottom_point = (r_bottom_point + 1) % len(right_hull)
                 no_right_backtrack = False
-    print("\n")
-    print("Left Hull ", left_hull)
-    print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
-    print(left_hull[l_bottom_point : l_top_point + 1 ])
+    # print("\n")
+    # print("Left Hull ", left_hull)
+    # print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
+    # print(left_hull[l_bottom_point : l_top_point + 1 ])
     
-    print("\n")
-    print("Right Hull ", right_hull)
-    print("Top: ", r_top_point, "Bottom: " , r_bottom_point)
-    print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
+    # print("\n")
+    # print("Right Hull ", right_hull)
+    # print("Top: ", r_top_point, "Bottom: " , r_bottom_point)
+    # print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
+    # [top: end] + [beginning: bottom] 
 
+    if r_top_point == r_bottom_point:
+        right_half = []
+        right_half.append(right_hull[r_top_point])
+    else:
+        right_half = right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
 
+    if l_top_point == l_bottom_point:
+        left_half = []
+        left_half.append(left_hull[l_top_point])
+    else:
+        left_half = left_hull[l_bottom_point : l_top_point + 1 ]
 
-    hull = left_hull[l_bottom_point : l_top_point + 1 ] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
+    hull = left_half + right_half
     clockwise_sort(hull)
     # print(hull)
 

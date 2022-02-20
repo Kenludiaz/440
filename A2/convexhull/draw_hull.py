@@ -12,20 +12,25 @@ from convex_hull import compute_hull
 def draw_point(canvas, x, y):
     return canvas.create_image((x, y), image=point_img, state=NORMAL)
 
+def draw_text(canvas, x, y):
+    return canvas.create_text(x + 50, y + 50,fill="darkblue",font="Times 20 italic bold",
+                        text=f'({x},{y})')
+
 
 def add_point(event):
     draw_point(w, event.x, event.y)
+    draw_text(w, event.x, event.y)
     points.append((event.x, event.y))
     return
 
 
 def draw_hull():
-    # points = [(623, 751), (624, 375), (624, 581), (646, 172), (681, 658), (716, 207), (751, 494), (776, 653), (816, 499), (864, 615), (871, 233), (911, 344)]
+    # points = [(183, 117), (210, 249), (260, 434), (344, 616), (354, 645), (465, 266), (470, 92), (495, 516), (533, 464), (701, 353), (715, 241), (784, 643), (809, 526)]
     hull = copy.copy(compute_hull(points))
     hull.append(hull[0])
     for i in range(0, len(hull) - 1):
         x1 = hull[i][0]
-        y1 = hull[i][1](751, 494), (776, 653), (816, 499), (864, 615), (871, 233), (911, 344)
+        y1 = hull[i][1]
         x2 = hull[i + 1][0]
         y2 = hull[i + 1][1]
         w.create_line(x1, y1, x2, y2, width=3)
@@ -35,12 +40,11 @@ def draw_hull():
 if __name__ == '__main__':
     master, points = Tk(), list()
 
-    # points = [(0,50),(0,100),(0,200),(100,0),(200,0),(200,200),(300,0),(400,0),(500,0),(500,100),(500,200),(100,70)]
-
     submit_button = Button(master, text="Draw Hull", command=draw_hull)
     submit_button.pack()
     quit_button = Button(master, text="Quit", command=master.quit)
     quit_button.pack()
+
 
     canvas_width = 1000
     canvas_height = 800
