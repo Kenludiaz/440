@@ -16,9 +16,11 @@ def y_intercept(p1: Point, p2: Point, x: float) -> float:
     x1, y1 = p1
     x2, y2 = p2
     slope = 0
+    print(p1, p2)
     try:
         slope = (y2 - y1) / (x2 - x1)
     except:
+        print(x, p1, p2)
         pass
     return y1 + (x - x1) * slope
 
@@ -276,15 +278,16 @@ def compute_hull(points: List[Point]) -> List[Point]:
     else:
         points = sorted(points, key= lambda x: x[0])
         median_index = math.ceil(len(points)/2)
+        median_value = points[median_index][0]
 
         # sorts points into left and right arrays based off of median value
         left_points = []
         right_points = []
-        for i in range(len(points)):
-            if i < median_index:
-                left_points.append(points[i])
+        for point in points:
+            if point[0] < median_value:
+                left_points.append(point)
             else:
-                right_points.append(points[i])
+                right_points.append(point)
 
         # call recursive computation on our divided lists
         left_hull = compute_hull(left_points)
