@@ -15,7 +15,11 @@ def y_intercept(p1: Point, p2: Point, x: float) -> float:
     """
     x1, y1 = p1
     x2, y2 = p2
-    slope = (y2 - y1) / (x2 - x1)
+    slope = 0
+    try:
+        slope = (y2 - y1) / (x2 - x1)
+    except:
+        pass
     return y1 + (x - x1) * slope
 
 
@@ -113,6 +117,7 @@ def check_positions(positions):
 def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
+    print("In base case ", points)
     if len(points) == 1:
         return points
     hull = []
@@ -145,7 +150,7 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     :param right_hull:
     :return:
     """
-    # find the inner most point on the left set of points
+    # Find the inner most point on the left set of points
     l_top_point = 0
     l_bottom_point = 0
     for i in range(len(left_hull)):
@@ -153,7 +158,7 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             l_top_point = i
             l_bottom_point = i
 
-    # find the inner most point on the right set of points
+    # Find the inner most point on the right set of points
     r_top_point = 0
     r_bottom_point = 0
     for i in range(len(right_hull)):
@@ -161,101 +166,99 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             r_top_point = i
             r_bottom_point = i
 
-    # average inner x coordinates and record as middle intersection
+    # Average inner x coordinates and record as middle intersection
     middle_line = (left_hull[l_top_point][0] + right_hull[r_top_point][0])/2
 
-    # find starting intersection with middle line
+    # Find starting intersection with middle line
     top_intersection = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
     bottom_intersection = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
 
-    # set up variables useful for our end condition in looping
-    no_left_backtrack = True
-    no_right_backtrack = True
 
-    # 5: find top tangent
     clockwise_sort(left_hull)
     clockwise_sort(right_hull)
-    while no_left_backtrack:
 
-        # Decrement index == move counterclockwise
-        l_top_point -= 1
+    no_left_backtrack = True
+    no_right_backtrack = True
+    while (no_left_backtrack or no_left_backtrack):
 
-        # See if new_top is higher up
-        new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
-        if new_top < top_intersection:
-            top_intersection = new_top
-        else:
-            # Move clockwise and leave left alone
-            l_top_point += 1
-            no_left_backtrack = False
+        if no_right_backtrack:
+            # Increment index == move clockwise
+            # Modulo prevent overflow
+            r_top_point = (r_top_point + 1) % len(right_hull) 
 
-    while no_right_backtrack:
+            # See if the new top is higher up
+            new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+            if new_top < top_intersection:
+                top_intersection = new_top
+                no_left_backtrack = True
+            
+            else:
+                # Move counterclockwise and leave left alone
+                r_top_point -= 1 
+                no_right_backtrack = False
 
-        # Increment index == move clockwise
-        # Modulo prevent overflow
-        r_top_point = (r_top_point + 1) % len(right_hull) 
+        if no_left_backtrack:
 
-        # See if the new top is higher up
-        new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
-        if new_top < top_intersection:
-            top_intersection = new_top
-        else:
-            # Move counterclockwise and leave left alone
-            r_top_point -= 1 
-            no_right_backtrack = False
+            # Decrement index == move counterclockwise
+            l_top_point -= 1
+
+            # See if new_top is higher up
+            new_top = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
+            if new_top < top_intersection:
+                top_intersection = new_top
+                no_right_backtrack = True
+            else:
+                # Move clockwise and leave left alone
+                l_top_point = (l_top_point + 1) % len(left_hull)
+                no_left_backtrack = False
 
     no_left_backtrack  = True
     no_right_backtrack = True
 
+    while no_right_backtrack or no_left_backtrack:
 
-    while no_left_backtrack:
+        if no_left_backtrack:
+            # Increment == move clockwise
+            # Modulo prevents overflow
+            l_bottom_point = (l_bottom_point + 1) % len(left_hull)
 
-        # Increment == move clockwise
-        # Modulo prevents overflow
-        l_bottom_point = (l_bottom_point + 1) % len(left_hull)
+            # See if new bottom is lower down
+            new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+            if new_bottom > bottom_intersection:
+                bottom_intersection = new_bottom
+                no_right_backtrack = True
+            else:
+                l_bottom_point -= 1
+                no_left_backtrack = False
 
-        # See if new bottom is lower down
-        new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
-        if new_bottom > bottom_intersection:
-            bottom_intersection = new_bottom
-        else:
-            l_bottom_point -= 1
-            no_left_backtrack = False
+        if no_right_backtrack:
 
-    while no_right_backtrack:
+            # Decrement == move counter-clockwise
+            r_bottom_point -= 1
 
-        # Decrement == move counter-clockwise
-        r_bottom_point -= 1
-
-        # See if new bottom is lower down
-        new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
-        if new_bottom > bottom_intersection:
-            bottom_intersection = new_bottom
-        else:
-            r_bottom_point = (r_bottom_point + 1) % len(right_hull)
-            no_right_backtrack = False
+            # See if new bottom is lower down
+            new_bottom = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
+            if new_bottom > bottom_intersection:
+                bottom_intersection = new_bottom
+                no_left_backtrack = True
+            else:
+                r_bottom_point = (r_bottom_point + 1) % len(right_hull)
+                no_right_backtrack = False
+    print("\n")
+    print("Left Hull ", left_hull)
+    print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
+    print(left_hull[l_bottom_point : l_top_point + 1 ])
     
-    # print("\n")
-    # print(right_hull)
-    # print(r_bottom_point, r_top_point)
-    # print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
-
-    # print("\n")
-    # print(left_hull)
-    # print(l_bottom_point, l_top_point)
-    # print(l_top_point % len(left_hull) + 1)
-    # print(left_hull[l_bottom_point : l_top_point % len(left_hull) + 1])
+    print("\n")
+    print("Right Hull ", right_hull)
+    print("Top: ", r_top_point, "Bottom: " , r_bottom_point)
+    print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
 
 
-    hull = left_hull[l_bottom_point : l_top_point % len(left_hull) + 1] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
-    # clockwise_sort(hull)
+
+    hull = left_hull[l_bottom_point : l_top_point + 1 ] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
+    clockwise_sort(hull)
     # print(hull)
-    
-    # use slice function to take left bottom index up to left top index + 1 -> left hull. add to point
-    # use slice function to take right top hull section from right top to end of list -> right top
-        # add to points
-    # use slice function to go from start of right list to right bottom index + 1 -> right bottom
-        # add to points list
 
     return hull
 
@@ -289,4 +292,5 @@ def compute_hull(points: List[Point]) -> List[Point]:
 
         # merge and conquer
         points = finger_merge(left_hull, right_hull)
+        
     return points
