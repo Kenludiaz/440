@@ -119,7 +119,7 @@ def check_positions(positions):
 def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
-    print("In base case ", points)
+    # print("In base case ", points)
     if len(points) == 1:
         return points
     hull = []
@@ -246,10 +246,10 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             else:
                 r_bottom_point = (r_bottom_point + 1) % len(right_hull)
                 no_right_backtrack = False
-    print("\n")
-    print("Left Hull ", left_hull)
-    print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
-    print(left_hull[l_bottom_point : l_top_point + 1 ])
+    # print("\n")
+    # print("Left Hull ", left_hull)
+    # print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
+    # print(left_hull[l_bottom_point : l_top_point + 1 ])
     
     print("\n")
     print("Right Hull ", right_hull)

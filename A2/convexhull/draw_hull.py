@@ -12,14 +12,23 @@ from convex_hull import compute_hull
 def draw_point(canvas, x, y):
     return canvas.create_image((x, y), image=point_img, state=NORMAL)
 
+def draw_text(canvas, x, y):
+    return canvas.create_text(x + 50, y + 50,fill="darkblue",font="Times 20 italic bold",
+                        text=f'({x},{y})')
+
 
 def add_point(event):
     draw_point(w, event.x, event.y)
+    draw_text(w, event.x, event.y)
     points.append((event.x, event.y))
     return
 
 
 def draw_hull():
+<<<<<<< HEAD
+=======
+    # points = [(183, 117), (210, 249), (260, 434), (344, 616), (354, 645), (465, 266), (470, 92), (495, 516), (533, 464), (701, 353), (715, 241), (784, 643), (809, 526)]
+>>>>>>> 4b0db138454cba79a983c8b9f14cd56aaa33477f
     hull = copy.copy(compute_hull(points))
     hull.append(hull[0])
     for i in range(0, len(hull) - 1):
@@ -34,12 +43,16 @@ def draw_hull():
 if __name__ == '__main__':
     master, points = Tk(), list()
 
+<<<<<<< HEAD
     # points = [(1356621356, 1536730951), (356718641, 1746555946), (825800549, 1783940602), (2788324663, 576040383), (1513016989, 2409728621), (1678050503, 1764187625), (1232303581, 3735281464)]
 
+=======
+>>>>>>> 4b0db138454cba79a983c8b9f14cd56aaa33477f
     submit_button = Button(master, text="Draw Hull", command=draw_hull)
     submit_button.pack()
     quit_button = Button(master, text="Quit", command=master.quit)
     quit_button.pack()
+
 
     canvas_width = 1000
     canvas_height = 800
