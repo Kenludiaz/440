@@ -16,11 +16,11 @@ def y_intercept(p1: Point, p2: Point, x: float) -> float:
     x1, y1 = p1
     x2, y2 = p2
     slope = 0
-    print(p1, p2)
+    # print(p1, p2)
     try:
         slope = (y2 - y1) / (x2 - x1)
     except:
-        print(x, p1, p2)
+        # print(x, p1, p2)
         pass
     return y1 + (x - x1) * slope
 
@@ -251,10 +251,10 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     # print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
     # print(left_hull[l_bottom_point : l_top_point + 1 ])
     
-    print("\n")
-    print("Right Hull ", right_hull)
-    print("Bottom: " , r_bottom_point, "Top: ", r_top_point)
-    print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
+    # print("\n")
+    # print("Right Hull ", right_hull)
+    # print("Bottom: " , r_bottom_point, "Top: ", r_top_point)
+    # print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
 
     left_hull = left_hull[l_bottom_point : l_top_point + 1]
 
