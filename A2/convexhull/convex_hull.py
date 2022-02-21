@@ -16,11 +16,9 @@ def y_intercept(p1: Point, p2: Point, x: float) -> float:
     x1, y1 = p1
     x2, y2 = p2
     slope = 0
-    # print(p1, p2)
     try:
         slope = (y2 - y1) / (x2 - x1)
     except:
-        # print(x, p1, p2)
         pass
     return y1 + (x - x1) * slope
 
@@ -119,7 +117,9 @@ def check_positions(positions):
 def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
-    # print("In base case ", points)
+
+    # INITIALIZATION: Every point in the list a[n] will be part of the convex hull (Trivially True because a[n] will be empty)
+
     if len(points) <= 3:
         return points
     hull = []
@@ -135,6 +135,7 @@ def base_case_hull(points: List[Point]) -> List[Point]:
                     continue
                 positions.append(get_position(points[i], points[j], points[k]))
             # If so add them to the hull if not already there
+            # MAINTENANCE: For every iteration there will be a new point in a[n] that will be part of the base case for the convex hull
             if check_positions(positions):
                 if points[i] not in hull:
                     hull.append(points[i])
@@ -142,16 +143,14 @@ def base_case_hull(points: List[Point]) -> List[Point]:
                     hull.append(points[j])
     # Sort Clockwise
     clockwise_sort(hull)
+
+    # TERMINATION: Every point in a[n] will be part of the convex hull
+
     return hull
 
 
 def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]:
-    """
-
-    :param left_hull:
-    :param right_hull:
-    :return:
-    """
+    # INITIALIZATION: There will be two lists that pertain to the left and right sides of the convex hull
 
     clockwise_sort(left_hull)
     clockwise_sort(right_hull)
@@ -181,6 +180,8 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
 
     no_left_backtrack = True
     no_right_backtrack = True
+
+    # MAINTENANCE: For every iteration there will be a new intersection evaluated and compared to either tangents
     while no_left_backtrack or no_left_backtrack:
 
         if no_right_backtrack:
@@ -246,15 +247,6 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
             else:
                 r_bottom_point = (r_bottom_point + 1) % len(right_hull)
                 no_right_backtrack = False
-    # print("\n")
-    # print("Left Hull ", left_hull)
-    # print("Bottom: ", l_bottom_point, "Top: " , l_top_point)
-    # print(left_hull[l_bottom_point : l_top_point + 1 ])
-    
-    # print("\n")
-    # print("Right Hull ", right_hull)
-    # print("Bottom: " , r_bottom_point, "Top: ", r_top_point)
-    # print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
 
     left_hull = left_hull[l_bottom_point : l_top_point + 1]
 
@@ -265,9 +257,10 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     else:
         right_hull = right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
 
+    # TERMINATION: There will be no more new intersections to evaluate
+
     hull = left_hull + right_hull
     clockwise_sort(hull)
-    # print(hull)
 
     return hull
 
@@ -299,16 +292,12 @@ def compute_hull(points: List[Point]) -> List[Point]:
         # sorts points into left and right arrays based off of median value
         left_points = []
         right_points = []
-        # print(points)
-        # print(median_value, median_index)
         for point in points:
             if point[0] <= median_value:
                 left_points.append(point)
             else:
                 right_points.append(point)
 
-        # print(left_points)
-        # print(right_points)
         # call recursive computation on our divided lists
         left_hull = compute_hull(left_points)
         right_hull = compute_hull(right_points)
