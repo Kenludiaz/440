@@ -152,6 +152,10 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     :param right_hull:
     :return:
     """
+
+    clockwise_sort(left_hull)
+    clockwise_sort(right_hull)
+
     # Find the inner most point on the left set of points
     l_top_point = 0
     l_bottom_point = 0
@@ -175,13 +179,9 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     top_intersection = y_intercept(left_hull[l_top_point], right_hull[r_top_point], middle_line)
     bottom_intersection = y_intercept(left_hull[l_bottom_point], right_hull[r_bottom_point], middle_line)
 
-
-    clockwise_sort(left_hull)
-    clockwise_sort(right_hull)
-
     no_left_backtrack = True
     no_right_backtrack = True
-    while (no_left_backtrack or no_left_backtrack):
+    while no_left_backtrack or no_left_backtrack:
 
         if no_right_backtrack:
             # Increment index == move clockwise
@@ -253,12 +253,19 @@ def finger_merge(left_hull: List[Point], right_hull: List[Point]) -> List[Point]
     
     print("\n")
     print("Right Hull ", right_hull)
-    print("Top: ", r_top_point, "Bottom: " , r_bottom_point)
+    print("Bottom: " , r_bottom_point, "Top: ", r_top_point)
     print(right_hull[r_top_point:] + right_hull[:r_bottom_point + 1])
 
+    left_hull = left_hull[l_bottom_point : l_top_point + 1]
 
+    if (r_top_point % len(right_hull)) == (r_bottom_point % len(right_hull)):
+        singleton = right_hull[r_top_point]
+        right_hull = []
+        right_hull.append(singleton)
+    else:
+        right_hull = right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
 
-    hull = left_hull[l_bottom_point : l_top_point + 1 ] + right_hull[r_top_point:] + right_hull[:r_bottom_point + 1]
+    hull = left_hull + right_hull
     clockwise_sort(hull)
     # print(hull)
 
