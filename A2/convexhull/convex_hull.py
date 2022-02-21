@@ -120,7 +120,7 @@ def base_case_hull(points: List[Point]) -> List[Point]:
     """ Base case of the recursive algorithm.
     """
     # print("In base case ", points)
-    if len(points) == 1:
+    if len(points) <= 3:
         return points
     hull = []
     for i in range(len(points)):
@@ -135,7 +135,7 @@ def base_case_hull(points: List[Point]) -> List[Point]:
                     continue
                 positions.append(get_position(points[i], points[j], points[k]))
             # If so add them to the hull if not already there
-            if (check_positions(positions)):
+            if check_positions(positions):
                 if points[i] not in hull:
                     hull.append(points[i])
                 if points[j] not in hull:
@@ -276,26 +276,39 @@ def compute_hull(points: List[Point]) -> List[Point]:
     Given a list of points, computes the convex hull around those points
     and returns only the points that are on the hull.
     """
-    
+
+    if len(points) <= 1:
+        return points
+
     if len(points) <= 6:
         return(base_case_hull(points))
 
-
+    elif points[0][0] == points[-1][0]:
+        return points
     # recursive case
     else:
         points = sorted(points, key= lambda x: x[0])
-        median_index = math.ceil(len(points)/2)
+        median_index = math.floor(len(points)/2)
+
         median_value = points[median_index][0]
+        if points[0][0] == median_value:
+            median_value += .1
+        elif points[-1][0] == median_value:
+            median_value -= .1
 
         # sorts points into left and right arrays based off of median value
         left_points = []
         right_points = []
+        # print(points)
+        # print(median_value, median_index)
         for point in points:
-            if point[0] < median_value:
+            if point[0] <= median_value:
                 left_points.append(point)
             else:
                 right_points.append(point)
 
+        # print(left_points)
+        # print(right_points)
         # call recursive computation on our divided lists
         left_hull = compute_hull(left_points)
         right_hull = compute_hull(right_points)
