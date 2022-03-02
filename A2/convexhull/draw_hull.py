@@ -25,6 +25,7 @@ def add_point(event):
 
 
 def draw_hull():
+    # points = [(183, 117), (210, 249), (260, 434), (344, 616), (354, 645), (465, 266), (470, 92), (495, 516), (533, 464), (701, 353), (715, 241), (784, 643), (809, 526)]
     hull = copy.copy(compute_hull(points))
     hull.append(hull[0])
     for i in range(0, len(hull) - 1):
@@ -38,6 +39,7 @@ def draw_hull():
 
 if __name__ == '__main__':
     master, points = Tk(), list()
+
     submit_button = Button(master, text="Draw Hull", command=draw_hull)
     submit_button.pack()
     quit_button = Button(master, text="Quit", command=master.quit)
