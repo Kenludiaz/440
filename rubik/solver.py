@@ -1,3 +1,4 @@
+from operator import invert
 from typing import List
 from typing import Optional
 
@@ -25,55 +26,60 @@ def shortest_path(
     start_current_states = []
     end_current_states   = []
     
-    start_configs.update( {start: () } )
-    end_configs.update(   {end:   () } )
+    start_configs.update( {start: [] } )
+    end_configs.update(   {end:   [] } )
 
     start_current_states.append( start )
     end_current_states.append(    end  )
 
-#     For loop 7 times
-    start_new_states = []
-    end_new_states   = []
-#     Record past moves & current node for start
-    for current in start_current_states:
-        past_moves = start_configs.get(current)
+    for i in range(7):
+        start_new_states = []
+        end_new_states   = []
+    #     Record past moves & current node for start
+        for current in start_current_states:
+            past_moves = start_configs.get(current) # []
 
-        for move in rubik.quarter_twists:
-            new_cube = rubik.perm_apply(move, current)
-            current_moves = past_moves + tuple(move)
+            for move in rubik.quarter_twists:
+                new_cube = rubik.perm_apply(move, current)
+                current_moves = past_moves + [move]
 
-            # Saving the shortest path
-            if new_cube not in start_configs:
-                start_configs.update({new_cube: current_moves})
-                start_new_states.append(new_cube)
+                # Saving the shortest path
+                if new_cube not in start_configs:
+                    start_configs.update({new_cube: current_moves}) # a: [F]
+                    start_new_states.append(new_cube) 
 
-            # Checking if we found and answer
-            if new_cube in end_configs:
-                start_list = start_configs.get(new_cube)
-                inverted_list = tuple(map(rubik.perm_inverse, end_configs.get(new_cube)))
-                return [start_list + inverted_list]
+                # Checking if we found and answer
+                if new_cube in end_configs:
+                    start_list = start_configs.get(new_cube)
+                    inverted_list = list(map(rubik.perm_inverse, end_configs.get(new_cube)))
+                    inverted_list.reverse()
+                    return start_list + inverted_list
+            past_moves = []
 
+        start_current_states = start_new_states
 
-#     Record past moves & current nodes for end
-    for current in end_current_states:
-        past_moves = end_configs.get(end)
+    #     Record past moves & current nodes for end
+        for current in end_current_states:
+            past_moves = end_configs.get(current)
 
-        for move in rubik.quarter_twists:
-            new_cube = rubik.perm_apply(move, current)
-            current_moves = past_moves + move
+            for move in rubik.quarter_twists:
+                new_cube = rubik.perm_apply(move, current)
+                current_moves = past_moves + [move]
 
-            # Saving the shortest path
-            if new_cube not in end_configs:
-                end_configs.update({new_cube: current_moves})
-                end_new_states.append(new_cube)
+                # Saving the shortest path
+                if new_cube not in end_configs:
+                    end_configs.update({new_cube: current_moves})
+                    end_new_states.append(new_cube)
 
-            # Checking if we found and answer
-            if new_cube in start_configs:
-                start_list = start_configs.get(new_cube)
-                print(end_configs.get(new_cube))
-                inverted_list = tuple(map(rubik.perm_inverse, end_configs.get(new_cube)))
-                return [start_list + inverted_list]
+                # Checking if we found and answer
+                if new_cube in start_configs:
+                    start_list = start_configs.get(new_cube)
+                    inverted_list = list(map(rubik.perm_inverse, end_configs.get(new_cube)))
+                    inverted_list.reverse()
+                    return start_list + inverted_list  
 
-    # Make new states the current states
+            past_moves = []
+        end_current_states = end_new_states
+        
 
-    raise NotImplementedError
+    return None

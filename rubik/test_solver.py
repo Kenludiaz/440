@@ -59,6 +59,7 @@ class TestSolver(unittest.TestCase):
         middle3 = rubik.perm_apply(rubik.F, middle2)
         end = rubik.perm_apply(rubik.L, middle3)
         ans = solver.shortest_path(start, end)
+        # print([rubik.F, rubik.L, rubik.F, rubik.L])
         self.assertEqual(len(ans), 4)
         self.assert_good_path(start, end, ans)
 
