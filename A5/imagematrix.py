@@ -23,6 +23,8 @@ class ImageMatrix(dict):
             for i in range(self.width):
                 self[i,j] = next(pixels)
 
+
+
     def color_seam(self, seam, color=(255,0,0)):
         """Takes a seam (a list of coordinates) and colors it all one
         color."""
