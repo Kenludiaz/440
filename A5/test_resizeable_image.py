@@ -3,8 +3,10 @@ import sys
 from resizeable_image import ResizeableImage
 
 class TestImage(unittest.TestCase):
+    # def test_small(self):
+    #     self.image_test('sunset_small.png', 23147)
     def test_small(self):
-        self.image_test('sunset_small.png', 23147)
+        self.image_test('test.png', 25413)
 
     # def test_large(self):
     #     self.image_test('sunset_full.png', 26010)
