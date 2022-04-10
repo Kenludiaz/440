@@ -2,8 +2,29 @@ import imagematrix
 import sys
 
 class ResizeableImage(imagematrix.ImageMatrix):
-    def best_seam(self, dp=False):
-        self.naive_seam_carving()
+    def best_seam(self, dp=True):
+        if dp==False:
+            self.naive_seam_carving()
+
+        energies = []
+        for i in range(self.height):
+            for j in range(self.width):
+                energies.append(self.energy(i,j))
+        
+        for col in range(self.width):
+            row = 0
+            coordinates = []
+            min = 10000000000000000000000000000 
+            while row < self.height:
+                # Travel left
+                # until the end
+                # Pop
+                # Travel Down
+                # Pop
+                # Travel Rigtht
+                # Pop Twice repeat
+                row += 1
+        
 
     def remove_best_seam(self):
         self.remove_seam(self.best_seam())
